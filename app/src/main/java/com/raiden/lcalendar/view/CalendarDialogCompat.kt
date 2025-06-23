@@ -5,6 +5,10 @@ import android.content.Context
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
+import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.raiden.lcalendar.config.CalendarDialogConfig
 import com.raiden.lcalendar.config.OnSelectDateListener
 import java.util.*
@@ -28,22 +32,38 @@ class CalendarDialogCompat private constructor(
 
         isShowing = true
 
-        // 创建ComposeView - 简化版本，移除ViewTreeOwner设置
-        composeView = ComposeView(context).apply {
+        val dialog = android.app.Dialog(context, android.R.style.Theme_Translucent_NoTitleBar)
+        val composeView = ComposeView(context).apply {
             setContent {
                 CalendarDialogContent(
                     config = config,
                     onDismiss = {
-                        dismiss()
+                        dialog.dismiss()
+                        isShowing = false
                         config.onDismissListener?.invoke()
                     },
                     onConfirm = { selectedDate ->
                         config.onSelectDateListener?.onSelect(selectedDate)
-                        dismiss()
+                        dialog.dismiss()
+                        isShowing = false
                     }
                 )
             }
+
+            // 如果需要使用生命周期相关的特性（例如 rememberSaveable）
+            if (context is androidx.lifecycle.LifecycleOwner) {
+                setViewTreeLifecycleOwner(context as LifecycleOwner?)
+                setViewTreeViewModelStoreOwner(
+                    context as androidx.lifecycle.ViewModelStoreOwner)
+                setViewTreeSavedStateRegistryOwner(context as androidx.savedstate
+                    .SavedStateRegistryOwner)
+            }
         }
+
+        dialog.setContentView(composeView)
+        dialog.setCancelable(config.dismissOnBackPress)
+        dialog.setCanceledOnTouchOutside(config.dismissOnOutsideClick)
+        dialog.show()
     }
 
     /**
