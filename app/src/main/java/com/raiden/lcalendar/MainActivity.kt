@@ -19,8 +19,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.raiden.lcalendar.config.OnSelectDateListener
 import com.raiden.lcalendar.ui.theme.CalendarTheme
 import com.raiden.lcalendar.util.CalendarUtils
+import com.raiden.lcalendar.view.CalendarDialog
+import com.raiden.lcalendar.view.CalendarDialogComposable
 import com.raiden.lcalendar.view.CustomCalendar
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                CalendarExampleApp()
+                CalendarDialogUsageExample()
             }
         }
     }
@@ -568,3 +571,390 @@ fun prepareExampleData(): ExampleData {
         ExampleData(enabledDates, disabledDates, minDate, maxDate)
     }
 }
+
+/**
+ * 日历弹窗使用示例
+ */
+@Composable
+fun CalendarDialogUsageExample() {
+    val context = LocalContext.current
+    var selectedDateText by remember { mutableStateOf("未选择日期") }
+
+    // 各种弹窗的显示状态
+    var showBasicDialog by remember { mutableStateOf(false) }
+    var showAdvancedDialog by remember { mutableStateOf(false) }
+    var showComposableDialog by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+
+        Text(
+            text = "日历弹窗示例",
+            style = MaterialTheme.typography.headlineMedium,
+            color = CalendarTheme.TechColors.White
+        )
+
+        // 显示选中的日期
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = CalendarTheme.TechColors.TechYellow
+            )
+        ) {
+            Text(
+                text = "选中的日期: $selectedDateText",
+                modifier = Modifier.padding(16.dp),
+                color = CalendarTheme.TechColors.Black
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 基础使用示例
+        Button(
+            onClick = { showBasicDialog = true },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = CalendarTheme.TechColors.TechYellow
+            )
+        ) {
+            Text("显示基础日历弹窗", color = CalendarTheme.TechColors.Black)
+        }
+
+        // 高级配置示例
+        Button(
+            onClick = { showAdvancedDialog = true },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = CalendarTheme.TechColors.BorderGray
+            )
+        ) {
+            Text("显示高级配置弹窗", color = CalendarTheme.TechColors.White)
+        }
+
+        // 可组合组件示例
+        Button(
+            onClick = { showComposableDialog = true },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = CalendarTheme.TechColors.DisabledGray
+            )
+        ) {
+            Text("显示可组合弹窗", color = CalendarTheme.TechColors.White)
+        }
+
+        // 基础弹窗
+        if (showBasicDialog) {
+            BasicDialogExample(
+                onDateSelected = { selectedDate ->
+                    val formatter = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault())
+                    selectedDateText = formatter.format(selectedDate.time)
+                    showBasicDialog = false
+                },
+                onDismiss = { showBasicDialog = false }
+            )
+        }
+
+        // 高级配置弹窗
+        if (showAdvancedDialog) {
+            AdvancedDialogExample(
+                onDateSelected = { selectedDate ->
+                    val formatter = SimpleDateFormat("yyyy-MM-dd EEEE", Locale.getDefault())
+                    selectedDateText = formatter.format(selectedDate.time)
+                    showAdvancedDialog = false
+                },
+                onDismiss = { showAdvancedDialog = false }
+            )
+        }
+
+        // 可组合组件弹窗
+        if (showComposableDialog) {
+            val config = CalendarDialog.builder()
+                .setTitle("选择日期")
+                .setCancelButtonText("取消")
+                .setOkButtonText("确定")
+                .setEnabledColor(Color(0xFF00FF88))
+                .build()
+
+            CalendarDialogComposable(
+                showDialog = showComposableDialog,
+                config = config,
+                onDismiss = { showComposableDialog = false },
+                onDateSelected = { selectedDate ->
+                    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    selectedDateText = formatter.format(selectedDate.time)
+                    showComposableDialog = false
+                }
+            )
+        }
+    }
+}
+
+/**
+ * 基础日历弹窗示例
+ */
+@Composable
+fun BasicDialogExample(
+    onDateSelected: (Calendar) -> Unit,
+    onDismiss: () -> Unit
+) {
+    CalendarDialog.builder()
+        .setOnSelectDateListener(object : OnSelectDateListener {
+            override fun onSelect(selectedDate: Calendar) {
+                onDateSelected(selectedDate)
+            }
+        })
+        .setOnDismissListener {
+            onDismiss()
+        }
+        .show()
+}
+
+/**
+ * 高级配置弹窗示例
+ */
+@Composable
+fun AdvancedDialogExample(
+    onDateSelected: (Calendar) -> Unit,
+    onDismiss: () -> Unit
+) {
+    // 准备示例数据
+    val enabledDates = remember {
+        val dates = mutableSetOf<String>()
+        val calendar = Calendar.getInstance()
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        // 只启用本月的1-15号
+        for (day in 1..15) {
+            calendar.set(Calendar.DAY_OF_MONTH, day)
+            dates.add(formatter.format(calendar.time))
+        }
+        dates
+    }
+
+    val disabledDates = remember {
+        val dates = mutableSetOf<String>()
+        val calendar = Calendar.getInstance()
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        // 禁用3号和13号
+        calendar.set(Calendar.DAY_OF_MONTH, 3)
+        dates.add(formatter.format(calendar.time))
+        calendar.set(Calendar.DAY_OF_MONTH, 13)
+        dates.add(formatter.format(calendar.time))
+        dates
+    }
+
+    CalendarDialog.builder()
+        .setTitle("高级日历选择")
+        .setCancelButtonText("取消")
+        .setOkButtonText("确认")
+        .setEnabledDates(enabledDates)
+        .setDisabledDates(disabledDates)
+        .setEnabledColor(Color(0xFF00FF88))
+        .setDisabledColor(Color(0xFF666666))
+        .setMinDate(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -30) })
+        .setMaxDate(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, 30) })
+        .setDismissOnOutsideClick(false)
+        .setOnSelectDateListener(object : OnSelectDateListener {
+            override fun onSelect(selectedDate: Calendar) {
+                onDateSelected(selectedDate)
+            }
+        })
+        .setOnDismissListener {
+            onDismiss()
+        }
+        .show()
+}
+
+/**
+ * 实际应用场景示例
+ */
+@Composable
+fun RealWorldExamples() {
+    var showBookingDialog by remember { mutableStateOf(false) }
+    var showBirthdayDialog by remember { mutableStateOf(false) }
+    var showTaskDialog by remember { mutableStateOf(false) }
+    var resultText by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(
+            text = "实际应用场景",
+            style = MaterialTheme.typography.headlineSmall,
+            color = CalendarTheme.TechColors.White
+        )
+
+        // 预约系统
+        Button(
+            onClick = { showBookingDialog = true },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("预约系统 - 选择预约日期")
+        }
+
+        // 生日选择
+        Button(
+            onClick = { showBirthdayDialog = true },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("个人资料 - 选择生日")
+        }
+
+        // 任务截止日期
+        Button(
+            onClick = { showTaskDialog = true },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("任务管理 - 设置截止日期")
+        }
+
+        if (resultText.isNotEmpty()) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = CalendarTheme.TechColors.TechYellow
+                )
+            ) {
+                Text(
+                    text = resultText,
+                    modifier = Modifier.padding(16.dp),
+                    color = CalendarTheme.TechColors.Black
+                )
+            }
+        }
+
+        // 预约系统弹窗
+        if (showBookingDialog) {
+            BookingSystemDialog(
+                onDateSelected = { date ->
+                    val formatter = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault())
+                    resultText = "预约日期: ${formatter.format(date.time)}"
+                    showBookingDialog = false
+                },
+                onDismiss = { showBookingDialog = false }
+            )
+        }
+
+        // 生日选择弹窗
+        if (showBirthdayDialog) {
+            BirthdayPickerDialog(
+                onDateSelected = { date ->
+                    val formatter = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault())
+                    resultText = "生日: ${formatter.format(date.time)}"
+                    showBirthdayDialog = false
+                },
+                onDismiss = { showBirthdayDialog = false }
+            )
+        }
+
+        // 任务截止日期弹窗
+        if (showTaskDialog) {
+            TaskDeadlineDialog(
+                onDateSelected = { date ->
+                    val formatter = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault())
+                    resultText = "任务截止日期: ${formatter.format(date.time)}"
+                    showTaskDialog = false
+                },
+                onDismiss = { showTaskDialog = false }
+            )
+        }
+    }
+}
+
+/**
+ * 预约系统弹窗
+ */
+@Composable
+fun BookingSystemDialog(
+    onDateSelected: (Calendar) -> Unit,
+    onDismiss: () -> Unit
+) {
+    // 获取可预约的日期（示例：未来30天内的工作日）
+    val availableDates = remember {
+        val dates = mutableSetOf<String>()
+        val calendar = Calendar.getInstance()
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        for (i in 1..30) {
+            calendar.timeInMillis = System.currentTimeMillis()
+            calendar.add(Calendar.DAY_OF_MONTH, i)
+
+            // 只有工作日可以预约
+            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+            if (dayOfWeek in Calendar.MONDAY..Calendar.FRIDAY) {
+                dates.add(formatter.format(calendar.time))
+            }
+        }
+        dates
+    }
+
+    CalendarDialog.builder()
+        .setTitle("选择预约日期")
+        .setEnabledDates(availableDates)
+        .setMinDate(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, 1) })
+        .setMaxDate(Calendar.getInstance().apply { add(Calendar.MONTH, 3) })
+        .setEnabledColor(Color(0xFF4CAF50))
+        .setCancelButtonText("取消")
+        .setOkButtonText("确认预约")
+        .setOnSelectDateListener(object : OnSelectDateListener {
+            override fun onSelect(selectedDate: Calendar) {
+                onDateSelected(selectedDate)
+            }
+        })
+        .setOnDismissListener { onDismiss() }
+        .show()
+}
+
+/**
+ * 生日选择弹窗
+ */
+@Composable
+fun BirthdayPickerDialog(
+    onDateSelected: (Calendar) -> Unit,
+    onDismiss: () -> Unit
+) {
+    CalendarDialog.builder()
+        .setTitle("选择生日")
+        .setMinDate(Calendar.getInstance().apply { add(Calendar.YEAR, -100) })
+        .setMaxDate(Calendar.getInstance())
+        .setInitialDate(Calendar.getInstance().apply { add(Calendar.YEAR, -25) })
+        .setEnabledColor(Color(0xFF2196F3))
+        .setCancelButtonText("取消")
+        .setOkButtonText("确定")
+        .setOnSelectDateListener(object : OnSelectDateListener {
+            override fun onSelect(selectedDate: Calendar) {
+                onDateSelected(selectedDate)
+            }
+        })
+        .setOnDismissListener { onDismiss() }
+        .show()
+}
+
+/**
+ * 任务截止日期弹窗
+ */
+@Composable
+fun TaskDeadlineDialog(
+    onDateSelected: (Calendar) -> Unit,
+    onDismiss: () -> Unit
+) {
+    CalendarDialog.builder()
+        .setTitle("设置任务截止日期")
+        .setMinDate(Calendar.getInstance())
+        .setEnabledColor(Color(0xFFF44336))
+        .setCancelButtonText("取消")
+        .setOkButtonText("设置截止日期")
+        .setOnSelectDateListener(object : OnSelectDateListener {
+            override fun onSelect(selectedDate: Calendar) {
+                onDateSelected(selectedDate)
+            }
+        })
+        .setOnDismissListener { onDismiss() }
+        .show()
+}
+
