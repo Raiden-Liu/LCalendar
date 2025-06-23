@@ -12,6 +12,7 @@ import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.raiden.lcalendar.config.CalendarDialogConfig
 import com.raiden.lcalendar.config.OnSelectDateListener
 import java.util.*
+import androidx.core.graphics.toColorInt
 
 /**
  * 传统Android开发的日历弹窗兼容类 - 简化版本
@@ -265,7 +266,7 @@ object CalendarPickerHelper {
             .setEnabledDates(availableDates)
             .setMinDate(Calendar.getInstance())
             .setMaxDate(Calendar.getInstance().apply { add(Calendar.MONTH, 3) })
-            .setEnabledColor(android.graphics.Color.parseColor("#4CAF50"))
+            .setEnabledColor("#4CAF50".toColorInt())
             .setOnSelectDateListener(object : OnSelectDateListener {
                 override fun onSelect(selectedDate: Calendar) {
                     onDateSelected(selectedDate)
@@ -288,7 +289,7 @@ object CalendarPickerHelper {
             .setTitle("选择生日")
             .setMinDate(Calendar.getInstance().apply { add(Calendar.YEAR, -100) })
             .setMaxDate(Calendar.getInstance())
-            .setEnabledColor(android.graphics.Color.parseColor("#2196F3"))
+            .setEnabledColor("#2196F3".toColorInt())
             .setOnSelectDateListener(object : OnSelectDateListener {
                 override fun onSelect(selectedDate: Calendar) {
                     onDateSelected(selectedDate)
@@ -316,7 +317,7 @@ object CalendarPickerHelper {
         val builder = CalendarDialogCompat.builder(activity)
             .setTitle("设置截止日期")
             .setMinDate(Calendar.getInstance())
-            .setEnabledColor(android.graphics.Color.parseColor("#F44336"))
+            .setEnabledColor("#F44336".toColorInt())
             .setOkButtonText("设置截止日期")
             .setOnSelectDateListener(object : OnSelectDateListener {
                 override fun onSelect(selectedDate: Calendar) {
