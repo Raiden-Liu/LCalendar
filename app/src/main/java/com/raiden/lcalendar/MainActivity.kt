@@ -577,13 +577,13 @@ fun prepareExampleData(): ExampleData {
  */
 @Composable
 fun CalendarDialogUsageExample() {
-    val context = LocalContext.current
     var selectedDateText by remember { mutableStateOf("未选择日期") }
 
     // 各种弹窗的显示状态
     var showBasicDialog by remember { mutableStateOf(false) }
     var showAdvancedDialog by remember { mutableStateOf(false) }
     var showComposableDialog by remember { mutableStateOf(false) }
+    var mSelectedDate by remember { mutableStateOf<Calendar?>(null) }
 
     Column(
         modifier = Modifier
@@ -652,8 +652,10 @@ fun CalendarDialogUsageExample() {
                     val formatter = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault())
                     selectedDateText = formatter.format(selectedDate.time)
                     showBasicDialog = false
+                    mSelectedDate = selectedDate
                 },
-                onDismiss = { showBasicDialog = false }
+                onDismiss = { showBasicDialog = false },
+                defaultDate = mSelectedDate
             )
         }
 
@@ -664,8 +666,9 @@ fun CalendarDialogUsageExample() {
                     val formatter = SimpleDateFormat("yyyy-MM-dd EEEE", Locale.getDefault())
                     selectedDateText = formatter.format(selectedDate.time)
                     showAdvancedDialog = false
+
                 },
-                onDismiss = { showAdvancedDialog = false }
+                onDismiss = { showAdvancedDialog = false },
             )
         }
 
@@ -698,9 +701,10 @@ fun CalendarDialogUsageExample() {
 @Composable
 fun BasicDialogExample(
     onDateSelected: (Calendar) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    defaultDate: Calendar? = null
 ) {
-    CalendarDialog.builder()
+    val builder = CalendarDialog.builder()
         .setOnSelectDateListener(object : OnSelectDateListener {
             override fun onSelect(selectedDate: Calendar) {
                 onDateSelected(selectedDate)
@@ -709,7 +713,13 @@ fun BasicDialogExample(
         .setOnDismissListener {
             onDismiss()
         }
-        .show()
+
+    // 仅当 defaultDate 不为 null 时调用 setInitialDate
+    defaultDate?.let {
+        builder.setInitialDate(it)
+    }
+
+    builder.show()
 }
 
 /**
