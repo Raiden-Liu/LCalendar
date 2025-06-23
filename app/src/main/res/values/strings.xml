@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">Tech Calendar</string>
+
+    <!-- Calendar Component -->
+    <string name="calendar_title">Tech Style Calendar Component</string>
+    <string name="go_to_today">Go to Today</string>
+    <string name="previous_month">Previous Month</string>
+    <string name="next_month">Next Month</string>
+    <string name="date_selected">Selected Date</string>
+    <string name="current_month">Current Month</string>
+
+    <!-- Main Activity -->
+    <string name="main_title">🗓️ Tech Style Calendar</string>
+    <string name="main_subtitle">Material Design 3 • High Performance • Customizable</string>
+
+    <!-- Example Types -->
+    <string name="basic_calendar">Basic Calendar</string>
+    <string name="advanced_features">Advanced Features</string>
+    <string name="custom_timestamp">Custom Timestamp</string>
+    <string name="date_range_limit">Date Range Limit</string>
+
+    <!-- Example Descriptions -->
+    <string name="basic_calendar_desc">• Complete calendar functionality\n• Date selection and month switching\n• Back to today button</string>
+    <string name="advanced_calendar_desc">• Only enable days 1-15\n• Disable days 3 and 13\n• Custom color theme\n• Date range restriction</string>
+    <string name="custom_timestamp_desc">Initial date set to: January 1, 2024</string>
+    <string name="date_range_desc">Selectable date range: 30 days before and after</string>
+
+    <!-- Results -->
+    <string name="selection_result">Selection Result</string>
+    <string name="selected_date">Selected Date: %1$s</string>
+    <string name="current_month_display">Current Month: %1$s %2$d</string>
+    <string name="advanced_selected">Advanced Calendar Selected: %1$s</string>
+    <string name="timestamp_selected">Timestamp Calendar Selected: %1$s</string>
+    <string name="range_selected">Range Calendar Selected: %1$s</string>
+
+    <!-- Details -->
+    <string name="detail_info">Detail Info:</string>
+    <string name="timestamp_info">• Timestamp: %1$d</string>
+    <string name="weekday_info">• Weekday: %1$s</string>
+    <string name="is_today_info">• Is Today: %1$s</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="dismiss_details">Dismiss Details</string>
+
+    <!-- Bottom Instructions -->
+    <string name="bottom_instructions">Click date to select • Use navigation buttons to switch months • Click today button to return to current</string>
+
+    <!-- Example Selector -->
+    <string name="select_example">Select Example</string>
+
+    <!-- Features -->
+    <string name="features_title">🚀 Features</string>
+    <string name="feature_material_design">✓ Material Design 3 tech style design</string>
+    <string name="feature_date_selection">✓ Date selection and month switching support</string>
+    <string name="feature_today_button">✓ One-click back to today function</string>
+    <string name="feature_configurable_dates">✓ Configurable enable/disable dates</string>
+    <string name="feature_date_limits">✓ Min/max date limits support</string>
+    <string name="feature_custom_colors">✓ Custom color theme</string>
+    <string name="feature_callbacks">✓ Complete callback function support</string>
+    <string name="feature_performance">✓ High-performance LazyGrid implementation</string>
+    <string name="feature_modular">✓ Modular design, easy to maintain</string>
+    <string name="feature_testing">✓ Complete unit test coverage</string>
+
+    <!-- Month Names -->
+    <string name="january">January</string>
+    <string name="february">February</string>
+    <string name="march">March</string>
+    <string name="april">April</string>
+    <string name="may">May</string>
+    <string name="june">June</string>
+    <string name="july">July</string>
+    <string name="august">August</string>
+    <string name="september">September</string>
+    <string name="october">October</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+
+    <!-- Weekday Names -->
+    <string name="sunday_short">Sun</string>
+    <string name="monday_short">Mon</string>
+    <string name="tuesday_short">Tue</string>
+    <string name="wednesday_short">Wed</string>
+    <string name="thursday_short">Thu</string>
+    <string name="friday_short">Fri</string>
+    <string name="saturday_short">Sat</string>
+
+    <!-- Weekday Names Full -->
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+</resources>

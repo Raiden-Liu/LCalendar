@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">科技日历</string>
+
+    <!-- Calendar Component -->
+    <string name="calendar_title">科技风格日历组件</string>
+    <string name="go_to_today">回到今天</string>
+    <string name="previous_month">上个月</string>
+    <string name="next_month">下个月</string>
+    <string name="date_selected">选中日期</string>
+    <string name="current_month">当前月份</string>
+
+    <!-- Main Activity -->
+    <string name="main_title">🗓️ 科技风格日历</string>
+    <string name="main_subtitle">Material Design 3 • 高性能 • 可定制</string>
+
+    <!-- Example Types -->
+    <string name="basic_calendar">基础日历</string>
+    <string name="advanced_features">高级功能</string>
+    <string name="custom_timestamp">自定义时间戳</string>
+    <string name="date_range_limit">日期范围限制</string>
+
+    <!-- Example Descriptions -->
+    <string name="basic_calendar_desc">• 完整的日历功能\n• 日期选择和月份切换\n• 回到今天按钮</string>
+    <string name="advanced_calendar_desc">• 仅启用1-15号\n• 禁用3号和13号\n• 自定义颜色主题\n• 日期范围限制</string>
+    <string name="custom_timestamp_desc">初始日期设定为：2024年1月1日</string>
+    <string name="date_range_desc">可选日期范围：前后30天</string>
+
+    <!-- Results -->
+    <string name="selection_result">选择结果</string>
+    <string name="selected_date">选中日期：%1$s</string>
+    <string name="current_month_display">当前月份：%1$s %2$d年</string>
+    <string name="advanced_selected">高级日历选中：%1$s</string>
+    <string name="timestamp_selected">时间戳日历选中：%1$s</string>
+    <string name="range_selected">范围日历选中：%1$s</string>
+
+    <!-- Details -->
+    <string name="detail_info">详细信息：</string>
+    <string name="timestamp_info">• 时间戳：%1$d</string>
+    <string name="weekday_info">• 星期：%1$s</string>
+    <string name="is_today_info">• 是否今天：%1$s</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="dismiss_details">收起详情</string>
+
+    <!-- Bottom Instructions -->
+    <string name="bottom_instructions">点击日期进行选择 • 使用导航按钮切换月份 • 点击今天按钮回到当前日期</string>
+
+    <!-- Example Selector -->
+    <string name="select_example">选择示例</string>
+
+    <!-- Features -->
+    <string name="features_title">🚀 功能特性</string>
+    <string name="feature_material_design">✓ Material Design 3 科技风格设计</string>
+    <string name="feature_date_selection">✓ 支持日期选择和月份切换</string>
+    <string name="feature_today_button">✓ 一键回到今天功能</string>
+    <string name="feature_configurable_dates">✓ 可配置启用/禁用日期</string>
+    <string name="feature_date_limits">✓ 支持最小/最大日期限制</string>
+    <string name="feature_custom_colors">✓ 自定义颜色主题</string>
+    <string name="feature_callbacks">✓ 完整的回调函数支持</string>
+    <string name="feature_performance">✓ 高性能LazyGrid实现</string>
+    <string name="feature_modular">✓ 模块化设计，易于维护</string>
+    <string name="feature_testing">✓ 完整的单元测试覆盖</string>
+
+    <!-- Month Names -->
+    <string name="january">一月</string>
+    <string name="february">二月</string>
+    <string name="march">三月</string>
+    <string name="april">四月</string>
+    <string name="may">五月</string>
+    <string name="june">六月</string>
+    <string name="july">七月</string>
+    <string name="august">八月</string>
+    <string name="september">九月</string>
+    <string name="october">十月</string>
+    <string name="november">十一月</string>
+    <string name="december">十二月</string>
+
+    <!-- Weekday Names -->
+    <string name="sunday_short">日</string>
+    <string name="monday_short">一</string>
+    <string name="tuesday_short">二</string>
+    <string name="wednesday_short">三</string>
+    <string name="thursday_short">四</string>
+    <string name="friday_short">五</string>
+    <string name="saturday_short">六</string>
+
+    <!-- Weekday Names Full -->
+    <string name="sunday">星期日</string>
+    <string name="monday">星期一</string>
+    <string name="tuesday">星期二</string>
+    <string name="wednesday">星期三</string>
+    <string name="thursday">星期四</string>
+    <string name="friday">星期五</string>
+    <string name="saturday">星期六</string>
+</resources>
