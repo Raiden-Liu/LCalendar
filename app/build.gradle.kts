@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         publishing { singleVariant("release") }
-        minSdk = 21
+        minSdk = 30
         targetSdk = 35
 
 
