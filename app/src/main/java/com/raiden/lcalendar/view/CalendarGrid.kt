@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -58,22 +59,27 @@ fun CalendarGrid(
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
         modifier = modifier.fillMaxWidth().pointerInput(Unit){
-            detectHorizontalDragGestures(
+
+            var totalDragAmount = 0f
+            val dragThreshold = 100f
+
+            detectDragGestures(
+                onDragStart = {
+                    totalDragAmount = 0f
+                },
                 onDragEnd = {
-                    // 拖拽结束时的处理可以在这里添加
-                }
-            ){ change, dragAmount ->
-                // 检测滑动方向和距离
-                val threshold = 100f // 滑动阈值
-                if (abs(dragAmount) > threshold) {
-                    if (dragAmount > 0) {
-                        // 右滑 - 上个月
-                        onSwipeRight()
-                    } else {
-                        // 左滑 - 下个月
-                        onSwipeLeft()
+                    if (abs(totalDragAmount) > dragThreshold) {
+                        if (totalDragAmount > 0) {
+                            onSwipeRight() // 右滑上个月
+                        } else {
+                            onSwipeLeft() // 左滑下个月
+                        }
                     }
+                    totalDragAmount = 0f
                 }
+            ) { change, dragAmount ->
+                totalDragAmount += dragAmount.x
+                change.consume()
             }
         }.graphicsLayer {
             translationX = animatedOffset

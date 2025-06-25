@@ -69,7 +69,7 @@ fun CustomCalendar(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(horizontal = 16.dp, vertical = 5.dp)
         ) {
             // 月份导航栏
             CalendarHeader(

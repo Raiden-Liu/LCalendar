@@ -1,5 +1,6 @@
 plugins {
-    id("com.android.library")
+    alias(libs.plugins.android.application)
+//    id("com.android.library")
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     `maven-publish`
@@ -10,6 +11,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
+        applicationId = "com.raiden.lcalendar"
         publishing { singleVariant("release") }
         minSdk = 30
         targetSdk = 35

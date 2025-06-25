@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.raiden.lcalendar.ui.theme.CalendarTheme
@@ -34,23 +35,25 @@ fun CalendarHeader(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-
+    Text(text = currentCalendar.get(Calendar.YEAR).toString(),color = CalendarTheme.TechColors.White,
+        modifier= Modifier.fillMaxWidth(),
+        fontSize = 30.sp,
+        fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+    Spacer(modifier = Modifier.height(15.dp))
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         // 月份和年份显示
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+
             Text(
-                text = "${CalendarUtils.getMonthName(currentCalendar)} ${currentCalendar.get(Calendar.YEAR)}",
+                text = CalendarUtils.getMonthName(currentCalendar),
                 color = CalendarTheme.TechColors.White,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
-        }
+
 
         // 控制按钮组
         Row(
