@@ -1,8 +1,10 @@
 package com.raiden.lcalendar.view
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -14,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,6 +25,7 @@ import com.raiden.lcalendar.ui.theme.CalendarTheme
 import com.raiden.lcalendar.util.CalendarDay
 import com.raiden.lcalendar.util.CalendarUtils
 import java.util.*
+import kotlin.math.abs
 
 /**
  * 日历网格组件
@@ -30,6 +35,8 @@ fun CalendarGrid(
     currentCalendar: Calendar,
     selectedCalendar: Calendar,
     onDateClick: (Calendar) -> Unit,
+    onSwipeLeft: () -> Unit = {},
+    onSwipeRight: () -> Unit = {},
     enabledDates: Set<String>?,
     disabledDates: Set<String>,
     minDate: Calendar?,
@@ -41,10 +48,36 @@ fun CalendarGrid(
     val calendarDays = remember(currentCalendar) {
         CalendarUtils.getCalendarDays(currentCalendar)
     }
-
+    var swipeOffset by remember { mutableStateOf(0f) }
+    val animatedOffset by animateFloatAsState(
+        targetValue = swipeOffset,
+        finishedListener = {
+            swipeOffset = 0f
+        }
+    )
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().pointerInput(Unit){
+            detectHorizontalDragGestures(
+                onDragEnd = {
+                    // 拖拽结束时的处理可以在这里添加
+                }
+            ){ change, dragAmount ->
+                // 检测滑动方向和距离
+                val threshold = 100f // 滑动阈值
+                if (abs(dragAmount) > threshold) {
+                    if (dragAmount > 0) {
+                        // 右滑 - 上个月
+                        onSwipeRight()
+                    } else {
+                        // 左滑 - 下个月
+                        onSwipeLeft()
+                    }
+                }
+            }
+        }.graphicsLayer {
+            translationX = animatedOffset
+        },
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {

@@ -107,6 +107,16 @@ fun CustomCalendar(
                         selectedCalendar = date
                     }
                 },
+                onSwipeLeft = {
+                    // 左滑切换到下个月
+                    currentCalendar = CalendarUtils.getNextMonth(currentCalendar)
+                    onMonthChanged(currentCalendar.clone() as Calendar)
+                },
+                onSwipeRight = {
+                    // 右滑切换到上个月
+                    currentCalendar = CalendarUtils.getPreviousMonth(currentCalendar)
+                    onMonthChanged(currentCalendar.clone() as Calendar)
+                },
                 enabledDates = enabledDates,
                 disabledDates = disabledDates,
                 minDate = minDate,
