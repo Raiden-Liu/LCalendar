@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tech Calendar</string>
+    <string name="app_name_calendar">Tech Calendar</string>
 
     <!-- Calendar Component -->
     <string name="calendar_title">Tech Style Calendar Component</string>

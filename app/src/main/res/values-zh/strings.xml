@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">科技日历</string>
+    <string name="app_name_calendar">科技日历</string>
 
     <!-- Calendar Component -->
     <string name="calendar_title">科技风格日历组件</string>

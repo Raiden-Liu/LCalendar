@@ -86,7 +86,8 @@ fun CalendarDialogContent(
                     onDateSelected = { calendar ->
                         selectedCalendar = calendar
                     },
-                    onMonthChanged = { /* 处理月份变化 */ },
+                    onMonthChanged = { calendar ->
+                        config.onMonthChangedListener?.onMonthChanged(calendar) },
                     enabledDates = config.enabledDates,
                     disabledDates = config.disabledDates,
                     minDate = config.minDate,

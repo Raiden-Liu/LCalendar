@@ -30,6 +30,7 @@ data class CalendarDialogConfig(
 
     // 回调
     val onSelectDateListener: OnSelectDateListener? = null,
+    val onMonthChangedListener: OnMonthChangedListener? = null,
     val onDismissListener: (() -> Unit)? = null
 )
 /**
@@ -41,4 +42,14 @@ interface OnSelectDateListener {
      * @param selectedDate 选中的日期
      */
     fun onSelect(selectedDate: Calendar)
+}
+/**
+ * 月份切换监听器接口
+ */
+interface OnMonthChangedListener {
+    /**
+     * 当月份切换时调用
+     * @param calendar 切换后的月份日历对象
+     */
+    fun onMonthChanged(calendar: Calendar)
 }

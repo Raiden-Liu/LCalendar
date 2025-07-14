@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.raiden.lcalendar.config.CalendarDialogConfig
+import com.raiden.lcalendar.config.OnMonthChangedListener
 import com.raiden.lcalendar.config.OnSelectDateListener
 import java.util.*
 
@@ -123,6 +124,13 @@ class CalendarDialogBuilder {
      */
     fun setOnSelectDateListener(listener: OnSelectDateListener): CalendarDialogBuilder {
         config = config.copy(onSelectDateListener = listener)
+        return this
+    }
+    /**
+     * 设置月份切换监听器
+     */
+    fun setOnMonthChangedListener(listener: OnMonthChangedListener): CalendarDialogBuilder {
+        config = config.copy(onMonthChangedListener = listener)
         return this
     }
 

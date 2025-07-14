@@ -982,6 +982,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.raiden.lcalendar.config.OnMonthChangedListener
 import com.raiden.lcalendar.view.CalendarDialogCompat
 import com.raiden.lcalendar.view.CalendarPickerHelper
 import com.raiden.lcalendar.config.OnSelectDateListener
@@ -1107,8 +1108,8 @@ class MainActivity : FragmentActivity() {
      */
     private fun showAdvancedCalendar() {
         // 准备示例数据
-        val enabledDates = generateEnabledDates()
-        val disabledDates = generateDisabledDates()
+        val enabledDates = generateEnabledDates().toMutableSet()
+        var disabledDates = generateDisabledDates()
 
         CalendarDialogCompat.builder(this)
             .setTitle("高级配置日历")
@@ -1187,6 +1188,7 @@ class MainActivity : FragmentActivity() {
         }
         return dates
     }
+
 
     private fun generateDisabledDates(): Set<String> {
         val dates = mutableSetOf<String>()

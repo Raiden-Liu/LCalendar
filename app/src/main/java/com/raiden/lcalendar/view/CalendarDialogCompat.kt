@@ -13,6 +13,7 @@ import com.raiden.lcalendar.config.CalendarDialogConfig
 import com.raiden.lcalendar.config.OnSelectDateListener
 import java.util.*
 import androidx.core.graphics.toColorInt
+import com.raiden.lcalendar.config.OnMonthChangedListener
 
 /**
  * 传统Android开发的日历弹窗兼容类 - 简化版本
@@ -157,6 +158,11 @@ class CalendarDialogCompat private constructor(
 
         fun setOnSelectDateListener(listener: OnSelectDateListener): Builder {
             config = config.copy(onSelectDateListener = listener)
+            return this
+        }
+
+        fun setOnMonthChangedListener(listener: OnMonthChangedListener): Builder {
+            config = config.copy(onMonthChangedListener = listener)
             return this
         }
 
