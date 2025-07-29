@@ -47,7 +47,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 groupId = "com.github.Raiden-Liu"
                 artifactId = "LCalendar"
-                version = "1.0.6"
+                version = "1.0.12"
                 from(components["release"])
             }
         }
