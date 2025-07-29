@@ -17,6 +17,8 @@ import com.raiden.lcalendar.*
 import com.raiden.lcalendar.config.CalendarDialogConfig
 import com.raiden.lcalendar.ui.theme.CalendarTheme
 import java.util.*
+import android.content.res.Configuration
+import androidx.compose.ui.platform.LocalConfiguration
 
 /**
  * 日历弹窗内容组件
@@ -34,6 +36,10 @@ fun CalendarDialogContent(
         })
     }
 
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+
     // 处理返回键
     if (config.dismissOnBackPress) {
         BackHandler {
@@ -50,92 +56,169 @@ fun CalendarDialogContent(
         onDismissRequest = if (config.dismissOnOutsideClick) onDismiss else {{}},
         properties = DialogProperties(
             dismissOnBackPress = config.dismissOnBackPress,
-            dismissOnClickOutside = config.dismissOnOutsideClick
+            dismissOnClickOutside = config.dismissOnOutsideClick,
+                    usePlatformDefaultWidth = false
         )
     ) {
         Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
+            modifier = if (isLandscape) {
+                Modifier
+                    .fillMaxWidth(0.6f)
+                    .fillMaxHeight(0.7f)
+            } else {
+                Modifier
+                    .fillMaxWidth(0.8f)
+                    .wrapContentHeight()
+            },
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
                 containerColor = CalendarTheme.TechColors.Black
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
-            ) {
-                // 标题
-                if (title.isNotEmpty()) {
-                    Text(
-                        text = title,
-                        color = CalendarTheme.TechColors.White,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                }
-
-                // 日历组件
-                CustomCalendar(
-                    modifier = Modifier.fillMaxWidth(),
-                    initialTimestamp = config.initialTimestamp,
-                    onDateSelected = { calendar ->
-                        selectedCalendar = calendar
-                    },
-                    onMonthChanged = { calendar ->
-                        config.onMonthChangedListener?.onMonthChanged(calendar) },
-                    enabledDates = config.enabledDates,
-                    disabledDates = config.disabledDates,
-                    minDate = config.minDate,
-                    maxDate = config.maxDate,
-                    enabledColor = config.enabledColor,
-                    disabledColor = config.disabledColor
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // 按钮行
+            if (isLandscape) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // 取消按钮
-                    TextButton(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.textButtonColors(
-                            contentColor = CalendarTheme.TechColors.DisabledGray
-                        )
+                    // Calendar takes left side
+                    CustomCalendar(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
+                        initialTimestamp = config.initialTimestamp,
+                        onDateSelected = { calendar -> selectedCalendar = calendar },
+                        onMonthChanged = { calendar -> config.onMonthChangedListener?.onMonthChanged(calendar) },
+                        enabledDates = config.enabledDates,
+                        disabledDates = config.disabledDates,
+                        minDate = config.minDate,
+                        maxDate = config.maxDate,
+                        enabledColor = config.enabledColor,
+                        disabledColor = config.disabledColor
+                    )
+                    // Controls on right side
+                    Column(
+                        modifier = Modifier
+                            .weight(0.4f)
+                            .fillMaxHeight(),
+                        verticalArrangement = Arrangement.SpaceBetween
                     ) {
+                        // Title
+                        if (title.isNotEmpty()) {
+                            Text(
+                                text = title,
+                                color = CalendarTheme.TechColors.White,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        // Buttons row at bottom
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            TextButton(
+                                onClick = onDismiss,
+                                colors = ButtonDefaults.textButtonColors(
+                                    contentColor = CalendarTheme.TechColors.DisabledGray
+                                )
+                            ) {
+                                Text(
+                                    text = cancelText,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Button(
+                                onClick = { onConfirm(selectedCalendar) },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = CalendarTheme.TechColors.TechYellow,
+                                    contentColor = CalendarTheme.TechColors.Black
+                                ),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                Text(
+                                    text = okText,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Portrait layout (original content)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                ) {
+                    // Title
+                    if (title.isNotEmpty()) {
                         Text(
-                            text = cancelText,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium
+                            text = title,
+                            color = CalendarTheme.TechColors.White,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 16.dp)
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    // Calendar
+                    CustomCalendar(
+                        modifier = Modifier.fillMaxWidth(),
+                        initialTimestamp = config.initialTimestamp,
+                        onDateSelected = { calendar -> selectedCalendar = calendar },
+                        onMonthChanged = { calendar -> config.onMonthChangedListener?.onMonthChanged(calendar) },
+                        enabledDates = config.enabledDates,
+                        disabledDates = config.disabledDates,
+                        minDate = config.minDate,
+                        maxDate = config.maxDate,
+                        enabledColor = config.enabledColor,
+                        disabledColor = config.disabledColor
+                    )
 
-                    // 确定按钮
-                    Button(
-                        onClick = {
-                            onConfirm(selectedCalendar)
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = CalendarTheme.TechColors.TechYellow,
-                            contentColor = CalendarTheme.TechColors.Black
-                        ),
-                        shape = RoundedCornerShape(8.dp)
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    // Buttons row
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = okText,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium
-                        )
+                        TextButton(
+                            onClick = onDismiss,
+                            colors = ButtonDefaults.textButtonColors(
+                                contentColor = CalendarTheme.TechColors.DisabledGray
+                            )
+                        ) {
+                            Text(
+                                text = cancelText,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Button(
+                            onClick = { onConfirm(selectedCalendar) },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = CalendarTheme.TechColors.TechYellow,
+                                contentColor = CalendarTheme.TechColors.Black
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text(
+                                text = okText,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
                     }
                 }
             }
