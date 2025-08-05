@@ -18,6 +18,7 @@ import com.raiden.lcalendar.config.CalendarDialogConfig
 import com.raiden.lcalendar.ui.theme.CalendarTheme
 import java.util.*
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.platform.LocalConfiguration
 
 /**
@@ -63,11 +64,11 @@ fun CalendarDialogContent(
         Card(
             modifier = if (isLandscape) {
                 Modifier
-                    .fillMaxWidth(0.6f)
-                    .fillMaxHeight(0.7f)
+                    .fillMaxWidth(0.7f)
+                    .fillMaxHeight(0.9f)
             } else {
                 Modifier
-                    .fillMaxWidth(0.8f)
+                    .fillMaxWidth(0.85f)
                     .wrapContentHeight()
             },
             shape = RoundedCornerShape(16.dp),
@@ -115,24 +116,12 @@ fun CalendarDialogContent(
                             )
                         }
                         // Buttons row at bottom
-                        Row(
+                        Column(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalArrangement = Arrangement.Bottom,
+                            horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            TextButton(
-                                onClick = onDismiss,
-                                colors = ButtonDefaults.textButtonColors(
-                                    contentColor = CalendarTheme.TechColors.DisabledGray
-                                )
-                            ) {
-                                Text(
-                                    text = cancelText,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
+
                             Button(
                                 onClick = { onConfirm(selectedCalendar) },
                                 colors = ButtonDefaults.buttonColors(
@@ -143,6 +132,19 @@ fun CalendarDialogContent(
                             ) {
                                 Text(
                                     text = okText,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            TextButton(
+                                onClick = onDismiss,
+                                colors = ButtonDefaults.textButtonColors(
+                                    contentColor = CalendarTheme.TechColors.DisabledGray
+                                )
+                            ) {
+                                Text(
+                                    text = cancelText,
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.Medium
                                 )
